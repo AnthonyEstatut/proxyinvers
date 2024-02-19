@@ -69,7 +69,7 @@ sudo a2enmod proxy_http
  ```
 ### Configurar Apache para actuar como un proxy inverso:
 
-Edita el archivo de configuración predeterminado de Apache:
+Edita un nuevo archivo de configuración de Apache:
  ```sh
 sudo nano /etc/apache2/sites-available/proxyinvers.conf
  ```
