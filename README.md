@@ -92,8 +92,49 @@ Reiniciar Apache:
  ```sh
 sudo systemctl restart apache2
  ```
+### Configurar Apache SSL para actuar como un proxy inverso 
 
-### Verificar la configuración del proxy inverso:
+Verificar la configuración del proxy inverso:
+Instalar OpenSSL (si aún no está instalado):
 
+```sh
+sudo apt update
+sudo apt install openssl
+```
+
+Habilitar los módulos necesarios para SSL:
+ ```sh
+sudo a2enmod ssl
+ ```
+Genera los certificados SSL:
+
+Para generar un certificado autofirmado, ejecuta el siguiente comando.
+ ```sh
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/apache-selfsigned.key -out /etc/ssl/certs/apache-selfsigned.crt
+ ```
+Configura Apache para actuar como proxy inverso con SSL:
+Edita el archivo de configuración de Proxyinvers creado anteriormente. Cambia el puero a 443.
+ ```sh
+ServerName tunombredehost.com
+
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/certs/ssl-cert-snakeoil.pem
+    SSLCertificateKeyFile /etc/ssl/private/ssl-cert-snakeoil.key
+
+    <Proxy *>
+        Require all granted
+    </Proxy>
+ ```
+Guarda los cambios con Ctrl+O y sal con Ctrl+X.
+
+Reinicia Apache:
+ ```sh
+systemctl restart apache2
+ ```
+
+Abre el puerto 443 en el firewall (si es necesario):
+```sh
+sudo ufw allow 443
+ ```
 Accede a tu servidor Apache mediante su dirección IP o dominio. Deberías ver el contenido servido por el servidor backend configurado en el paso 1, pero accediendo a través del puerto 80, el puerto predeterminado de Apache.
 
